@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise Agent Builder Platform — PRD</title>
+<style>
+  :root {
+    --accent: #236cff;
+    --accent-soft: #eaf1ff;
+    --accent-deep: #1a52c4;
+    --ink: #1a2233;
+    --ink-2: #4a5568;
+    --ink-3: #8a94a6;
+    --surface: #ffffff;
+    --surface-2: #f6f8fb;
+    --surface-3: #eef1f6;
+    --line: #e3e8f0;
+    --good: #108000;
+    --warn: #b45309;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --maxw: 1180px;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font);
+    color: var(--ink);
+    background: var(--surface);
+    line-height: 1.6;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- top tab bar ---------- */
+  nav.tabs {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .tabs-inner {
+    max-width: var(--maxw); margin: 0 auto; padding: 0 20px;
+    display: flex; align-items: center; gap: 6px;
+    overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .tabs-inner::-webkit-scrollbar { display: none; }
+  .tabs-brand {
+    font-weight: 700; font-size: 13px; letter-spacing: .02em;
+    color: var(--ink); white-space: nowrap; padding: 14px 12px 14px 0;
+    border-right: 1px solid var(--line); margin-right: 6px;
+  }
+  button.tab {
+    font-family: var(--font); font-size: 14px; color: var(--ink-2);
+    background: none; border: none; cursor: pointer;
+    padding: 15px 14px; white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color .15s;
+  }
+  button.tab:hover { color: var(--ink); }
+  button.tab.active { color: var(--accent-deep); border-bottom-color: var(--accent); font-weight: 600; }
+
+  /* ---------- tab panels ---------- */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ---------- two-column layout: sidebar tiles + content ---------- */
+  .layout {
+    max-width: var(--maxw); margin: 0 auto; padding: 32px 20px 80px;
+    display: grid; grid-template-columns: 230px 1fr; gap: 40px;
+    align-items: start;
+  }
+  .layout.single { grid-template-columns: 1fr; max-width: 980px; }
+
+  aside.tiles {
+    position: sticky; top: 72px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .tiles-label {
+    font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-3); padding: 0 4px 4px;
+  }
+  button.tile {
+    font-family: var(--font); font-size: 13.5px; font-weight: 500;
+    text-align: left; color: var(--ink-2);
+    background: var(--surface-2); border: 1px solid var(--line);
+    border-radius: var(--radius-sm); cursor: pointer;
+    padding: 10px 14px;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  button.tile:hover { background: var(--surface-3); color: var(--ink); }
+  button.tile.active {
+    background: var(--accent-soft); color: var(--accent-deep);
+    border-color: var(--accent); font-weight: 600;
+  }
+
+  /* ---------- content sections ---------- */
+  main.content { min-width: 0; }
+  section.sub {
+    padding: 8px 0 48px;
+    scroll-margin-top: 84px;
+  }
+  section.sub + section.sub { border-top: 1px solid var(--line); padding-top: 40px; }
+  .kicker {
+    font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--accent-deep); margin-bottom: 8px;
+  }
+  h2 { font-size: 26px; line-height: 1.25; letter-spacing: -.01em; margin-bottom: 14px; }
+  h3 { font-size: 18px; margin: 28px 0 10px; }
+  p { color: var(--ink-2); margin-bottom: 14px; max-width: 76ch; }
+  p strong, li strong { color: var(--ink); }
+
+  .tbd {
+    font-size: 14px; color: var(--ink-3); font-style: italic;
+    background: var(--surface-2); border: 1px dashed var(--line);
+    border-radius: var(--radius-sm); padding: 18px 20px;
+  }
+
+  ul, ol { margin: 0 0 16px 22px; }
+  li { color: var(--ink-2); margin-bottom: 7px; max-width: 76ch; }
+  .prompt-block h3:first-of-type { margin-top: 20px; }
+
+  a.xlink {
+    color: var(--accent-deep); font-weight: 600; text-decoration: none;
+    border-bottom: 1px solid var(--accent-soft); white-space: nowrap;
+  }
+  a.xlink:hover { border-bottom-color: var(--accent); }
+
+  code {
+    font-family: var(--mono); font-size: .9em;
+    background: var(--surface-3); border-radius: 4px; padding: 1px 5px;
+    color: var(--ink);
+  }
+
+  /* ---------- PR announcement framing ---------- */
+  .note {
+    font-size: 14px; color: var(--ink-3); font-style: italic;
+    border-left: 3px solid var(--line); padding-left: 14px; margin-bottom: 22px;
+  }
+  .headline {
+    font-size: 22px; font-weight: 700; line-height: 1.3; letter-spacing: -.01em;
+    color: var(--ink); margin-bottom: 6px; max-width: 30ch;
+  }
+  .dateline {
+    font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+    color: var(--ink-3); margin-bottom: 20px;
+  }
+  .principle {
+    background: var(--accent-soft); border-radius: var(--radius-sm);
+    padding: 14px 18px; margin-bottom: 14px;
+  }
+  .principle p { margin: 0; color: var(--ink); }
+
+  /* ---------- FAQ ---------- */
+  .qa { margin-bottom: 34px; }
+  .qa > h3 {
+    font-size: 17px; margin: 0 0 10px; color: var(--ink);
+    padding-left: 26px; text-indent: -26px;
+  }
+  .qa > h3::before {
+    content: "Q."; color: var(--accent); font-weight: 700; margin-right: 8px;
+  }
+  .qa .a { padding-left: 26px; }
+
+  .lede { font-size: 17px; }
+  .footnote {
+    font-size: 13px; color: var(--ink-3);
+    border-top: 1px dashed var(--line); padding-top: 12px; margin-top: 18px; max-width: 80ch;
+  }
+
+  /* ---------- north star cards ---------- */
+  .northstars {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 14px; margin: 16px 0;
+  }
+  .ns {
+    border: 1px solid var(--accent); border-radius: var(--radius); padding: 22px 24px;
+    background: linear-gradient(180deg, var(--accent-soft) 0%, var(--surface) 55%);
+  }
+  .ns .ns-tag { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-deep); }
+  .ns .ns-name { font-size: 19px; font-weight: 700; margin: 6px 0 4px; }
+  .ns .ns-target { font-size: 14px; font-weight: 700; color: var(--accent-deep); margin-bottom: 8px; }
+  .ns p { font-size: 14px; margin: 0; max-width: none; }
+  .ns ul { margin: 0 0 0 18px; }
+  .ns li { font-size: 14px; line-height: 1.5; margin-bottom: 5px; max-width: none; }
+  .ns li:last-child { margin-bottom: 0; }
+
+  /* ---------- bring-your-own cards ---------- */
+  .byo {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px; margin: 16px 0 20px;
+  }
+  .byo-card {
+    border: 1px solid var(--line); border-radius: var(--radius-sm);
+    padding: 14px 16px; background: var(--surface-2);
+  }
+  .byo-name {
+    font-size: 15px; font-weight: 700; color: var(--accent-deep); margin-bottom: 5px;
+  }
+  .byo-card p { font-size: 13.5px; margin: 0; max-width: none; line-height: 1.5; }
+
+  /* ---------- playbook steps ---------- */
+  .pb-steps { margin: 22px 0 8px; }
+  .pb-step {
+    display: grid; grid-template-columns: 96px 1fr; gap: 20px;
+    padding-bottom: 26px; position: relative;
+  }
+  .pb-step:not(:last-child)::before {
+    content: ""; position: absolute; left: 7px; top: 22px; bottom: 0;
+    width: 2px; background: var(--line);
+  }
+  .pb-when {
+    position: relative; padding-left: 30px;
+    font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent-deep); padding-top: 2px;
+  }
+  .pb-when::before {
+    content: ""; position: absolute; left: 0; top: 6px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--surface); border: 3px solid var(--accent);
+  }
+  .pb-body {
+    border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px 22px; background: var(--surface);
+  }
+  .pb-title { font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+  .pb-body > p { margin-bottom: 14px; }
+  .pb-meta {
+    border-top: 1px solid var(--line); padding-top: 12px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .pb-meta > div { font-size: 14px; color: var(--ink-2); }
+  .pb-meta b {
+    display: block; font-size: 11px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink-3); margin-bottom: 2px;
+  }
+  @media (max-width: 620px) {
+    .pb-step { grid-template-columns: 1fr; gap: 10px; }
+    .pb-step:not(:last-child)::before { display: none; }
+    .pb-when { padding-left: 24px; }
+  }
+
+  /* ---------- tables ---------- */
+  .table-scroll { overflow-x: auto; margin-bottom: 18px; }
+  table {
+    border-collapse: collapse; width: 100%; min-width: 520px;
+    font-size: 14.5px; line-height: 1.5;
+  }
+  th, td {
+    text-align: left; vertical-align: top;
+    padding: 11px 14px; border-bottom: 1px solid var(--line);
+  }
+  th {
+    font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--ink-3); background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
+  }
+  td { color: var(--ink-2); }
+  td:first-child { color: var(--ink); font-weight: 600; }
+  tbody tr:last-child td { border-bottom: none; }
+  table ul { margin: 0 0 0 18px; }
+  table li { margin-bottom: 3px; font-size: 14.5px; }
+  td .pill {
+    display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px;
+    border-radius: 999px; background: var(--surface-3); color: var(--ink-2);
+    white-space: nowrap;
+  }
+  td .pill.dx { background: var(--accent-soft); color: var(--accent-deep); }
+
+  tr.group td {
+    font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent-deep); background: var(--accent-soft);
+    padding: 8px 14px; border-bottom: 1px solid var(--line);
+  }
+  tr.group + tr td { border-top: none; }
+  tr.group .group-note {
+    font-weight: 500; text-transform: none; letter-spacing: 0;
+    color: var(--ink-3); margin-left: 8px;
+  }
+
+  /* ---------- learning plan matrix ---------- */
+  table.matrix { min-width: 0; font-size: 14px; table-layout: fixed; }
+  table.matrix th:nth-child(1), table.matrix td.owner { width: 17%; }
+  table.matrix th:nth-child(2) { width: 20%; }
+  table.matrix th:nth-child(3) { width: 35%; }
+  table.matrix th, table.matrix td { padding: 11px 14px; }
+  /* rowspan shifts which cell is first-child, so set weight explicitly per column */
+  table.matrix td { font-weight: 400; color: var(--ink-2); }
+  table.matrix td.obj { font-weight: 600; color: var(--ink); }
+  table.matrix td.owner { font-weight: 700; color: var(--ink); }
+  td.owner {
+    background: var(--surface-2); font-weight: 700; color: var(--ink);
+    border-right: 1px solid var(--line);
+  }
+  td.owner .owner-sub {
+    display: block; font-size: 12px; font-weight: 500; color: var(--ink-3);
+    text-transform: none; letter-spacing: 0; margin-top: 3px;
+  }
+  table.matrix tbody tr td { border-bottom: 1px solid var(--line); }
+  .open-q {
+    display: block; margin-top: 8px; font-size: 13.5px;
+    color: var(--warn); font-style: italic;
+  }
+
+  /* ---------- problem / hypothesis statement blocks ---------- */
+  .stmt { margin: 22px 0 26px; }
+  .stmt-label {
+    font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 16px;
+  }
+  .stmt p { margin-bottom: 16px; max-width: 84ch; }
+  .stmt p:last-child { margin-bottom: 0; }
+  .stmt-k { color: var(--accent); }
+
+  /* ---------- representative stories table ---------- */
+  table.stories { font-size: 14px; table-layout: fixed; }
+  table.stories th:nth-child(1), table.stories td.owner { width: 15%; }
+  table.stories th:nth-child(2) { width: 38%; }
+  table.stories td { color: var(--ink-2); font-weight: 400; }
+  table.stories td.owner { font-weight: 700; color: var(--ink); }
+  table.stories td.obj { font-weight: 700; color: var(--ink); }
+  .story-line {
+    display: block; margin-top: 6px;
+    font-weight: 400; color: var(--ink-2); font-style: italic;
+  }
+  table.stories ul { margin: 0 0 0 17px; }
+  table.stories li { font-size: 13.5px; margin-bottom: 4px; line-height: 1.45; }
+  table.stories li:last-child { margin-bottom: 0; }
+
+  /* ---------- mobile: sidebar becomes horizontal tile row ---------- */
+  @media (max-width: 760px) {
+    .layout { grid-template-columns: 1fr; gap: 20px; padding-top: 20px; }
+    aside.tiles {
+      position: sticky; top: 49px; z-index: 40;
+      flex-direction: row; gap: 6px;
+      background: rgba(255,255,255,.95); backdrop-filter: blur(8px);
+      margin: 0 -20px; padding: 10px 20px;
+      overflow-x: auto; scrollbar-width: none;
+      border-bottom: 1px solid var(--line);
+    }
+    aside.tiles::-webkit-scrollbar { display: none; }
+    .tiles-label { display: none; }
+    button.tile { white-space: nowrap; padding: 7px 12px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="tabs">
+  <div class="tabs-inner">
+    <span class="tabs-brand">Enterprise Agent Builder Platform</span>
+    <button class="tab" data-tab="prompt">Prompt</button>
+    <button class="tab" data-tab="cover">Cover (PRFAQ)</button>
+    <button class="tab" data-tab="measures">Success Measures &amp; Learning Plan</button>
+    <button class="tab" data-tab="prd">PRD</button>
+    <button class="tab" data-tab="playbooks">Runbook</button>
+  </div>
+</nav>
+
+<!-- ============ Tab 1: Prompt ============ -->
+<div class="panel" id="panel-prompt">
+  <div class="layout single">
+    <main class="content">
+      <section class="sub prompt-block" id="prompt-main">
+        <div class="kicker">Prompt</div>
+        <h2>Prompt</h2>
+
+        <p>You have just joined as the PM for the Agentic Platform. Nothing exists yet. Four domain teams (GTM, Finance, HR, and Product) each want to ship an agentic application this quarter, and each is ready to build it themselves.</p>
+
+        <p>Write a PRD for what the platform ships in its first two quarters. Your target is idea to production in under four weeks for a standard agent.</p>
+
+        <p><strong>Note:</strong> this is assuming you are building on Databricks using the capabilities that existing + additional components on top of it</p>
+
+        <h3>Cover</h3>
+        <ul>
+          <li>Which domain team you build with first, and why</li>
+          <li>The minimum set of capabilities that makes using the platform faster than building bespoke</li>
+          <li>What you deliberately do not build</li>
+          <li>How you avoid becoming a bottleneck as adoption grows</li>
+          <li>The three tiers of adoption and the governance checkpoint at each</li>
+          <li>The metrics you would report to the CIO for next quarter</li>
+        </ul>
+
+        <h3>Logistics</h3>
+        <ul>
+          <li>Four to Six pages or roughly ten slides. We read it beforehand, so do not spend the session reading it back to us.</li>
+          <li>Email us clarifying questions before you start. How you scope the ambiguity is part of what we are assessing.</li>
+          <li>Please do not include confidential information from current or prior employers. Use public knowledge and hypotheticals.</li>
+        </ul>
+
+        <h3>What we look for</h3>
+        <p>Clear problem framing, platform judgment (building for teams that build on top of you), a defensible first release with named cuts, real technical tradeoffs, adoption and developer experience metrics rather than feature counts</p>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- ============ Tab 2: Cover (PRFAQ) ============ -->
+<div class="panel" id="panel-cover">
+  <div class="layout">
+    <aside class="tiles">
+      <div class="tiles-label">On this page</div>
+      <button class="tile" data-target="cover-pr">PR</button>
+      <button class="tile" data-target="cover-faq">FAQ</button>
+    </aside>
+    <main class="content">
+
+      <section class="sub" id="cover-pr">
+        <div class="kicker">Cover (PRFAQ)</div>
+        <h2>PRFAQ — Enterprise Agent Builder Platform</h2>
+        <p class="note">The end state, written first as the internal announcement we intend to send</p>
+
+        <div class="headline">Any team can now ship a governed agent on shared rails, and GTM shipped the first one</div>
+        <div class="dateline">For the CIO and the GTM, Finance, HR, and Product teams</div>
+
+        <p>The Enterprise Agent Builder Platform is now live. Any domain team within Databricks can start from a golden-path template and have an agent deployed in production in as little as four weeks, with built-in data access and governance, evaluation rails, deployment, tracing, and cost tracking. Bricksters can now spend their time on the parts that are actually their own: the tools the agent calls, the prompt, and what a good answer looks like in their domain. The first agent built this way is a GTM account-research and call-prep assistant. It went from idea to production within four weeks on the shared rails.</p>
+
+        <p>The platform is a thin, opinionated layer on top of Agent Bricks that standardizes how access is governed, how quality is gated, and how agents are cataloged. That gives teams a paved road to ship faster, and with confidence.</p>
+
+        <div class="principle">
+          <p><strong>Core principle:</strong> teams own their domain and agentic outcomes; the platform owns the substrate underneath.</p>
+        </div>
+      </section>
+
+      <section class="sub" id="cover-faq">
+        <h2>FAQ</h2>
+
+        <div class="qa">
+          <h3>Why build with GTM first?</h3>
+          <div class="a">
+            <p>GTM exercises the hard parts of the substrate: governed CRM access, retrieval over messy account history, and evaluation of open-ended output. Increasing the velocity of shipping agentic experiences in GTM will, in our assessment, have the most tangible impact on Databricks' revenue growth and the success of our customers.</p>
+            <p>We debated Finance and HR, and decided to sequence them as follow-up use cases. They carry a higher governance burden and a lower tolerance for a wrong answer, so they benefit most from onboarding after the governance and eval patterns are proven.</p>
+          </div>
+        </div>
+
+        <div class="qa">
+          <h3>What does the platform give me that I don't get by building it myself?</h3>
+          <div class="a">
+            <p>The split is: you bring the three things that are actually yours, and the platform owns everything underneath them.</p>
+
+            <div class="byo">
+              <div class="byo-card">
+                <div class="byo-name">Your model</div>
+                <p>Point at any model served through the platform's routing layer. Switching models is a config change, not a code change.</p>
+              </div>
+              <div class="byo-card">
+                <div class="byo-name">Your prompt</div>
+                <p>Author it inline or reference a versioned prompt. We scan for inline secrets before anything publishes.</p>
+              </div>
+              <div class="byo-card">
+                <div class="byo-name">Your tools</div>
+                <p>Register what the agent calls: an MCP server, an OpenAPI spec, or a plain HTTP endpoint with a schema. Access is scoped to the caller through Unity Catalog.</p>
+              </div>
+            </div>
+
+            <p>What the platform owns, so no team has to build it twice:</p>
+            <ul>
+              <li><strong>The agent skeleton and graph topology.</strong> One standard shape (the <code>ResponsesAgent</code> contract) so every agent is traceable, testable, and deployable the same way.</li>
+              <li><strong>Governed data and tool access</strong> through Unity Catalog, with per-tool auth and access enforced on behalf of the calling user.</li>
+              <li><strong>The eval pipeline</strong>, hooked up and waiting for the team's golden dataset and rubric.</li>
+              <li><strong>Draft, publish, invoke.</strong> Test against a draft and iterate without republishing; ship when it holds up.</li>
+              <li><strong>Version history with one-click rollback</strong>, so a bad prompt change can be reverted without a redeploy.</li>
+              <li><strong>Execution tracing</strong> — the full tool-call tree for a run, including inputs, outputs, and latency per step.</li>
+              <li><strong>Deploy, CI, and cost tracking</strong> on by default, scoped per team.</li>
+            </ul>
+
+            <p>Everything on this list is either a one-way door that is expensive to retrofit later, or something every agent needs. A team building bespoke builds all of it themselves, and then owns it.</p>
+          </div>
+        </div>
+
+        <div class="qa">
+          <h3>What did you deliberately not build?</h3>
+          <div class="a">
+            <p>We deferred these to avoid building shared abstractions from a sample of one.</p>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cut</th>
+                    <th>Why it's out of V1</th>
+                    <th>Instead</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Custom model training / fine-tuning</td>
+                    <td>Foundation models are sufficient for starter use cases.</td>
+                    <td>Foundation Model APIs via model routing.</td>
+                  </tr>
+                  <tr>
+                    <td>Shared tool catalog</td>
+                    <td>A catalog at n=1 is a sub-optimal abstraction.</td>
+                    <td>Governed registration pathway; the catalog organically emerges from reuse.</td>
+                  </tr>
+                  <tr>
+                    <td>Bespoke frontend framework</td>
+                    <td>Commoditized; not our differentiation.</td>
+                    <td>Databricks Apps (Streamlit or React).</td>
+                  </tr>
+                  <tr>
+                    <td>Streaming-first / real-time</td>
+                    <td>Complexity the first use cases don't need.</td>
+                    <td>Request/response with human review.</td>
+                  </tr>
+                  <tr>
+                    <td>Visual / drag-and-drop agent builder</td>
+                    <td>Premature; our users are Python-fluent engineers. Config-driven registration covers them without a builder UI.</td>
+                    <td>Declarative config + docs.</td>
+                  </tr>
+                  <tr>
+                    <td>Multi-agent orchestration</td>
+                    <td>Reuse pattern unknown at one agent.</td>
+                    <td>Simple in-agent steps; platformize after the additional use cases.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="qa">
+          <h3>How does the platform avoid becoming a bottleneck as more teams adopt it?</h3>
+          <div class="a">
+            <p>Teams can build off the suggested path. We are targeting earned adoption, not mandated adoption. We enforce two binding constraints and nothing else:</p>
+            <ul>
+              <li><strong>Adoption tiers</strong> — standardized checkpoints to graduate an agent across environments.</li>
+              <li><strong>The agent registry</strong> — every deployed agent is cataloged, on or off the path.</li>
+            </ul>
+            <p>We will also monitor why teams go off-path. Understanding the rationale behind those decisions gives us a field signal on how to prioritize the platform backlog.</p>
+          </div>
+        </div>
+
+        <div class="qa">
+          <h3>What are the adoption tiers, and the governance checkpoint at each?</h3>
+          <div class="a">
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Tier</th>
+                    <th>What it is</th>
+                    <th>Checkpoint to advance</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Tier 1 — Sandbox / internal-assist</td>
+                    <td>Human-in-the-loop, internal users, drafts only.</td>
+                    <td>Automated checks only: passing eval on the team's golden dataset, catalog registration, UC access scoped to caller.</td>
+                  </tr>
+                  <tr>
+                    <td>Tier 2 — Internal production</td>
+                    <td>Runs in a team's real workflow, still internal.</td>
+                    <td>
+                      <ul>
+                        <li>Named owner and on-call</li>
+                        <li>Gateway rate limits and PII guardrails on; cost budget set</li>
+                        <li>Platform reviews eval results and data scope</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Tier 3 — External / regulated</td>
+                    <td>Touches customers, finances, or regulated data.</td>
+                    <td>
+                      <ul>
+                        <li>Security, legal, and red-team sign-off</li>
+                        <li>Full audit trail</li>
+                        <li>Human-in-the-loop or an approved autonomy policy</li>
+                      </ul>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Registration is required at all three, and the automated Tier 1 checks apply on or off the golden path.</p>
+          </div>
+        </div>
+
+        <div class="qa">
+          <h3>What would you report to the CIO next quarter?</h3>
+          <div class="a">
+            <p><strong>Focus Areas:</strong></p>
+            <ul>
+              <li>Broad platform approach — what is governed vs. flexible</li>
+              <li>Success measures and learning plan</li>
+            </ul>
+            <p><strong>Two North Stars:</strong></p>
+            <ul>
+              <li>Time to production for a standard agent (target: under four weeks)</li>
+              <li>Self-serve adoption: agents shipped without our help</li>
+            </ul>
+            <p><strong>Leading and platform metrics:</strong> golden-path adoption, eval-gate coverage, and cost per agent. We do not report features shipped, lines of code, or tickets closed.</p>
+            <p>A 0→1 learning plan tests the assumptions the first two builds must prove. <a class="xlink" href="#measures">See Success Measures &amp; Learning Plan →</a></p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ============ Tab 3: Success Measures & Learning Plan ============ -->
+<div class="panel" id="panel-measures">
+  <div class="layout">
+    <aside class="tiles">
+      <div class="tiles-label">On this page</div>
+      <button class="tile" data-target="measures-metrics">Success Measures</button>
+      <button class="tile" data-target="measures-learning">Learning Plan</button>
+    </aside>
+    <main class="content">
+
+      <section class="sub" id="measures-metrics">
+        <div class="kicker">How we'll know it's working</div>
+        <h2>Success Metrics</h2>
+        <div class="northstars">
+          <div class="ns">
+            <div class="ns-tag">North Star</div>
+            <div class="ns-name">Time to production</div>
+            <div class="ns-target">Target: under four weeks, reported quarterly</div>
+            <ul>
+              <li>p50, idea to production, standard use case</li>
+              <li>Clock starts at template scaffold, stops at Tier 1 deploy</li>
+            </ul>
+          </div>
+          <div class="ns">
+            <div class="ns-tag">North Star</div>
+            <div class="ns-name">Self-serve adoption</div>
+            <div class="ns-target">Target: agents shipped to production, reported quarterly</div>
+            <ul>
+              <li>Teams that ship without our hand-holding</li>
+              <li>Clearest signal we stayed off the critical path</li>
+              <li>Measured by platform support hours the build consumes</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Why it matters</th>
+                <th>Target next quarter</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="group"><td colspan="3">Developer Experience <span class="group-note">leading indicators</span></td></tr>
+              <tr>
+                <td>App code a team writes</td>
+                <td>How much of the build the rails absorb. Less app code per agent means less for the team to maintain and review.</td>
+                <td>&gt; 50% reduction vs. a bespoke build of the same agent</td>
+              </tr>
+              <tr>
+                <td>App files a team owns</td>
+                <td>Surface area handed to the domain team. Fewer files is less to understand before the first change.</td>
+                <td>&gt; 30% reduction vs. bespoke</td>
+              </tr>
+              <tr>
+                <td>Time to first end-to-end deploy</td>
+                <td>How fast a team gets something running. The earliest read on whether the golden path works, available in week one.</td>
+                <td>Under 2 hours from scaffold</td>
+              </tr>
+              <tr>
+                <td>First-attempt deploy success rate</td>
+                <td>Whether the rails are reliable enough to trust. Repeated retries on deploy are the friction teams remember.</td>
+                <td>&gt; 90%</td>
+              </tr>
+              <tr>
+                <td>CI / eval pipeline pass reliability</td>
+                <td>How often a run fails for platform reasons rather than agent quality. Flaky infrastructure is a common reason teams leave a golden path.</td>
+                <td>Platform-caused failures &lt; 5% of runs</td>
+              </tr>
+              <tr class="group"><td colspan="3">Platform Efficacy</td></tr>
+              <tr>
+                <td>% of agents on the golden path</td>
+                <td>Platform leverage — are teams choosing it?</td>
+                <td>&gt; 70%</td>
+              </tr>
+              <tr>
+                <td>Eval gate: coverage + blocks</td>
+                <td>Quality. Blocked promotions are evidence the gate works.</td>
+                <td>100% of prod agents passed; blocked promotions &gt; 0 early</td>
+              </tr>
+              <tr>
+                <td>Cost per agent + reuse ratio</td>
+                <td>Cost discipline. Reuse ratio: shared platform components in use per agent, read from catalog metadata.</td>
+                <td>Flat-to-down as count grows</td>
+              </tr>
+              <tr>
+                <td>Duplicates caught at registration</td>
+                <td>Catalog doing its job against sprawl.</td>
+                <td>Measured quarterly + catalog audit</td>
+              </tr>
+              <tr class="group"><td colspan="3">Guardrail</td></tr>
+              <tr>
+                <td>Off-path deployments, grouped by reason</td>
+                <td>Every off-path agent records why it left the golden path at registration. Recurring reasons are the platform's best feedback: each one is either a gap to fix or the next platformization candidate.</td>
+                <td>100% of off-path deploys have a recorded reason; recurring reasons reviewed at the Q1 retro</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="sub" id="measures-learning">
+        <div class="kicker">0 → 1</div>
+        <h2>Learning Plan</h2>
+        <p class="lede">Success Metrics report whether the platform works. This plan is what the first two builds have to teach us. At n=1 most of the claims in this document are assumptions, so each row names what we are testing, the metric that settles it, and what we do with the answer.</p>
+
+        <h3>Learning priorities</h3>
+        <p>Ordered by how much launch risk they carry:</p>
+        <ol>
+          <li><strong>Speed.</strong> Is the golden path faster than a team building it themselves? A GTM build that runs to twelve weeks invalidates the case for the platform.</li>
+          <li><strong>Governance throughput.</strong> Does a standard blueprint turn security review into a pattern check? Review time is the likeliest place the four-week target slips without us noticing.</li>
+          <li><strong>Self-serve.</strong> Can a second team ship without us in the room? If every build needs an embedded platform engineer, we do not scale past a handful of teams.</li>
+          <li><strong>Right abstractions.</strong> Did we platformize the correct things at n=1, or did we guess? Measured by what the second team keeps versus rewrites.</li>
+        </ol>
+
+        <div class="table-scroll">
+          <table class="matrix">
+            <thead>
+              <tr>
+                <th>Phase</th>
+                <th>Objective</th>
+                <th>Assumption under test</th>
+                <th>Key metric</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="owner" rowspan="2">GTM build<span class="owner-sub">Q1 · first agent</span></td>
+                <td class="obj">Validate speed</td>
+                <td>A team on the golden path reaches production faster than building bespoke.</td>
+                <td>Idea to Tier 1 deploy: under four weeks</td>
+              </tr>
+              <tr>
+                <td class="obj">Validate governance throughput</td>
+                <td>A standard blueprint compresses security review into a pattern check.</td>
+                <td>Review request to approval: ≤ 5 working days</td>
+              </tr>
+              <tr>
+                <td class="owner" rowspan="2">Second team<span class="owner-sub">Q2 · self-serve test</span></td>
+                <td class="obj">Validate self-serve</td>
+                <td>A second team ships without a platform engineer embedded.</td>
+                <td>Platform support hours consumed by the build</td>
+              </tr>
+              <tr>
+                <td class="obj">Validate the abstractions</td>
+                <td>What we platformized at n=1 holds for a second domain.</td>
+                <td>Template components kept vs. rewritten</td>
+              </tr>
+              <tr>
+                <td class="owner">Platform<span class="owner-sub">continuous</span></td>
+                <td class="obj">Understand off-path behavior</td>
+                <td>Teams leave the path for reasons we can fix.</td>
+                <td>Off-path reasons, grouped, reviewed quarterly</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Off-path reasons are captured at registration. It is the only place teams tell us why the path failed them, so recurring reasons set the backlog. Eval-gate usage and cost are already tracked in Success Metrics and are not re-tested here.</p>
+
+        <p><strong>Open questions:</strong> what counts as a "standard" agent for the four-week baseline, and which team goes second. Both are decided at the Q1 retro.</p>
+
+        <h3>Decision gates</h3>
+        <div class="northstars">
+          <div class="ns">
+            <div class="ns-tag">Q1 retro</div>
+            <div class="ns-name">After the GTM build</div>
+            <ul>
+              <li>Rewrite the four-week plan against what actually happened</li>
+              <li>Confirm which team goes second, and their start date</li>
+              <li>Pick the first platformization candidate from off-path reasons</li>
+            </ul>
+          </div>
+          <div class="ns">
+            <div class="ns-tag">End of Q2</div>
+            <div class="ns-name">After the second build</div>
+            <ul>
+              <li>Decide whether a third team onboards or the platform needs hardening first</li>
+              <li>If the abstractions did not survive contact with a second domain, we stop adding teams and fix them</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ============ Tab 4: PRD ============ -->
+<div class="panel" id="panel-prd">
+  <div class="layout">
+    <aside class="tiles">
+      <div class="tiles-label">On this page</div>
+      <button class="tile" data-target="prd-problem">Customer problem &amp; ideal state</button>
+      <button class="tile" data-target="prd-dace">DACE</button>
+      <button class="tile" data-target="prd-features">Key features</button>
+      <button class="tile" data-target="prd-sequencing">Q1 vs Q2 sequencing</button>
+      <button class="tile" data-target="prd-stories">Representative stories</button>
+    </aside>
+    <main class="content">
+
+      <!-- ---------- 1. Problem & ideal state ---------- -->
+      <section class="sub" id="prd-problem">
+        <div class="kicker">The problem</div>
+        <h2>Customer problem and ideal state</h2>
+
+        <div class="stmt">
+          <div class="stmt-label">Customer problem statement</div>
+          <p><span class="stmt-k">I am:</span> An engineer on a domain team — GTM, Finance, HR, or Product — handed a real agentic use case and a quarter to ship it.</p>
+          <p><span class="stmt-k">I am trying to:</span> Get a <strong>governed agent into production</strong> that my team can rely on in a real workflow.</p>
+          <p><span class="stmt-k">But:</span> The quarter goes to plumbing rather than to the agent. Security review alone stretches a weeks-long build into months.</p>
+          <p><span class="stmt-k">Because:</span> There is no paved road. I build my own eval harness, my own path to a governed data source, my own deployment, and I walk security through a system they have never seen before — as do the three teams building next to me.</p>
+        </div>
+
+        <p>The cost compounds from the fourth agent to the twentieth. The same plumbing gets rebuilt, it drifts, and nobody can answer which agents see which data, what they cost, or whether they still pass their own quality bar.</p>
+
+        <div class="stmt">
+          <div class="stmt-label">Hypothesis</div>
+          <p><span class="stmt-k">If we:</span> Give every domain team a <strong>governed scaffold on day one</strong>, with data access and security review pre-paid by a blueprint rather than negotiated per agent.</p>
+          <p><span class="stmt-k">Then:</span> Teams will spend the four weeks on the parts that are actually theirs — the tools the agent calls, the prompt, and what a good answer looks like in their domain — and <strong>ship in weeks rather than quarters</strong>.</p>
+          <p><span class="stmt-k">Which we will measure by:</span> Time from idea to a Tier 1 production deploy for a standard agent, and the share of that time spent on domain work versus plumbing.</p>
+          <p><span class="stmt-k">Success metric for this will be:</span> The GTM agent reaches production in <strong>under four weeks</strong>, and a second team repeats it <strong>without an embedded platform engineer</strong>.</p>
+        </div>
+
+        <h3>Ideal state</h3>
+        <p>Every deployed agent is registered, so the platform team can answer who owns what, what it touches, and what it costs — without asking around.</p>
+
+        <div class="principle">
+          <p><strong>Core principle:</strong> teams own their domain and agentic outcomes; the platform owns the substrate underneath.</p>
+        </div>
+
+      </section>
+
+      <!-- ---------- 2. DACE ---------- -->
+      <section class="sub" id="prd-dace">
+        <div class="kicker">Decision rights</div>
+        <h2>DACE</h2>
+
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Role</th>
+                <th>Who</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Driver</td>
+                <td>Platform PM</td>
+                <td>Owns the roadmap, the sequencing call, and the CIO readout.</td>
+              </tr>
+              <tr>
+                <td>Approver</td>
+                <td>Director, Platform / Data &amp; AI</td>
+                <td>Approves scope and the Q1 / Q2 split.</td>
+              </tr>
+              <tr>
+                <td>Consulted</td>
+                <td>Security · GTM Ops · Databricks account team · Data Platform</td>
+                <td>Security also approves the governance blueprint itself. The four-week target depends on that approval.</td>
+              </tr>
+              <tr>
+                <td>Escalation</td>
+                <td>VP Engineering → CIO</td>
+                <td>First escalation is a security review that will not pre-approve a pattern.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Reviewers: Legal, Privacy, and FinOps review before any agent advances past Tier 1.</p>
+      </section>
+
+      <!-- ---------- 3. Key features ---------- -->
+      <section class="sub" id="prd-features">
+        <div class="kicker">V1 scope</div>
+        <h2>Key features</h2>
+        <p class="lede">V1 is the platform plus the one agent that proves it. We platformize two kinds of things: one-way doors that are expensive to retrofit across many agents, and things every agent needs that are nearly free to generalize. Everything else stays bespoke until a second agent shows the real reuse pattern.</p>
+
+        <h3>What the platform owns</h3>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>What it is</th>
+                <th>Why platform</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Golden-path template</td>
+                <td>Runnable agent scaffold on day one: <code>ResponsesAgent</code>, eval hook, and deploy config in an Asset Bundle with CI.</td>
+                <td>Universal and near-free to generalize.</td>
+              </tr>
+              <tr>
+                <td>Governed data &amp; tool access</td>
+                <td>Unity Catalog as the permission spine, with on-behalf-of identity so an agent only touches what the caller can. We own the pathway to register a tool, not the tools.</td>
+                <td>One-way door. Collapses the multi-week security path into a pattern check.</td>
+              </tr>
+              <tr>
+                <td>Eval pipeline</td>
+                <td>Four gated stages: content quality against the team's golden dataset, latency against the tool budget, regression pass on every change, and RAI verification (PII, safety, prompt-injection). Teams own the rubric, dataset, and thresholds; the platform owns the machinery and the RAI floor.</td>
+                <td>One-way door and universal. The machinery generalizes; "what good means" is domain knowledge we should not fake.</td>
+              </tr>
+              <tr>
+                <td>One-command deploy</td>
+                <td>Databricks Apps as the single target, Lakebase for memory, rollback supported.</td>
+                <td>Universal. Prevents notebook-versus-app drift.</td>
+              </tr>
+              <tr>
+                <td>Observability + cost</td>
+                <td>MLflow tracing, usage tables, per-agent token cost by default, budget policy attached at deploy.</td>
+                <td>One-way door for lineage, universal for the rest.</td>
+              </tr>
+              <tr>
+                <td>Agent catalog</td>
+                <td>Every agent registers at deploy with owner, tier, data scope, and cost. Required at every tier.</td>
+                <td>One-way door. The only way to keep sprawl visible.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>What the domain team owns</h3>
+        <div class="principle">
+          <p>Which tools the agent calls and what they do, the prompt and domain logic, the golden dataset and rubric that define a good answer, and any multi-step logic inside the agent. We ship a safe way to plug a tool in, not a catalog of tools — at one agent we do not know which tools generalize.</p>
+        </div>
+      </section>
+
+      <!-- ---------- 4. Sequencing ---------- -->
+      <section class="sub" id="prd-sequencing">
+        <div class="kicker">Sequencing</div>
+        <h2>What ships in Q1 vs Q2</h2>
+
+        <div class="northstars">
+          <div class="ns">
+            <div class="ns-tag">Q1</div>
+            <div class="ns-name">Platform, kept thin — plus the agent that proves it</div>
+            <ul>
+              <li>Golden-path template</li>
+              <li>Governed tool registration pathway</li>
+              <li>Eval pipeline and the promotion gate</li>
+              <li>One-command deploy</li>
+              <li>Agent catalog and cost visibility</li>
+              <li>GTM call-prep agent live at Tier 1, behind rep review</li>
+            </ul>
+          </div>
+          <div class="ns">
+            <div class="ns-tag">Q2</div>
+            <div class="ns-name">A second team ships self-serve</div>
+            <ul>
+              <li>Second team ships without an embedded platform engineer — the real test</li>
+              <li>Tier 2 hardens around it: ownership and on-call, budget alerts, Gateway policies exercised in a live workflow</li>
+              <li>We platformize the first genuinely shared pattern the two builds expose</li>
+            </ul>
+          </div>
+        </div>
+
+        <p>No agent in the first two quarters targets Tier 3. That tier exists so teams can see what is ahead before they need it.</p>
+        <p>Which team goes second is decided at the Q1 retro. <a class="xlink" href="#measures/measures-learning">See the Learning Plan →</a></p>
+      </section>
+
+      <!-- ---------- 5. Representative stories ---------- -->
+      <section class="sub" id="prd-stories">
+        <div class="kicker">V1 stories</div>
+        <h2>Representative stories</h2>
+        <p>The features above, restated as the six P0 stories the first build must satisfy. Acceptance criteria are condensed; the full set ships with the template.</p>
+
+        <div class="table-scroll">
+          <table class="stories">
+            <thead>
+              <tr>
+                <th>Area</th>
+                <th>Story</th>
+                <th>Acceptance criteria (condensed)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="owner" rowspan="3">Builder<span class="owner-sub">domain engineer</span></td>
+                <td class="obj">Golden path<span class="story-line">I generate a new agent project from the golden-path template so I have a runnable agent on day one.</span></td>
+                <td>
+                  <ul>
+                    <li>One command scaffolds an Asset Bundle with a <code>ResponsesAgent</code> stub, eval hook, and deploy config</li>
+                    <li>Runs end to end against a sample tool before any domain code is written</li>
+                    <li>CI and MLflow tracing on by default</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td class="obj">Governed tools<span class="story-line">I register a tool through the governed pathway so my agent can call it without a bespoke security review.</span></td>
+                <td>
+                  <ul>
+                    <li>Tool registered as a UC function or managed MCP endpoint</li>
+                    <li>Access enforced on behalf of the calling user</li>
+                    <li>Tool and its data scope recorded in lineage</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td class="obj">Eval<span class="story-line">I supply my own golden dataset and rubric and run them through the shared harness.</span></td>
+                <td>
+                  <ul>
+                    <li>Harness runs team scorers plus the RAI floor (PII, safety, prompt-injection) and tool-call correctness</li>
+                    <li>Team sets the pass threshold</li>
+                    <li>Results logged to MLflow against the agent version</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td class="owner" rowspan="3">Operator<span class="owner-sub">platform team</span></td>
+                <td class="obj">Governance<span class="story-line">We attach a pre-approved governance blueprint at deploy so security review is a pattern check.</span></td>
+                <td>
+                  <ul>
+                    <li>UC schema, Gateway guardrails, rate limits, and budget policy applied from a named blueprint</li>
+                    <li>PII and safety guardrails on by default</li>
+                    <li>Deviations from the blueprint flagged for human review</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td class="obj">Eval gate<span class="story-line">We block promotion of any agent without a passing eval so quality is enforced rather than requested.</span></td>
+                <td>
+                  <ul>
+                    <li>No passing eval on the team's golden dataset means deploy is blocked</li>
+                    <li>Applies at every tier, on or off the golden path</li>
+                    <li>Gate result visible in the catalog entry</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td class="obj">Catalog<span class="story-line">We require every agent to register in the catalog at deploy so sprawl stays visible.</span></td>
+                <td>
+                  <ul>
+                    <li>Registration captures owner, tier, data scope, and cost budget</li>
+                    <li>Duplicate-intent check against existing entries</li>
+                    <li>Unregistered agents cannot reach Tier 2</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ============ Tab 5: Runbook ============ -->
+<div class="panel" id="panel-playbooks">
+  <div class="layout">
+    <aside class="tiles">
+      <div class="tiles-label">On this page</div>
+      <button class="tile" data-target="pb-4weeks">Deployment roadmap</button>
+    </aside>
+    <main class="content">
+
+      <section class="sub" id="pb-4weeks">
+        <div class="kicker">Runbook</div>
+        <h2>Deploying an agent in four weeks</h2>
+        <p class="lede">The target is under four weeks. It holds because the two items that used to eat the quarter — governed data access and security review — are pre-paid by the blueprint. What remains on the clock:</p>
+
+        <div class="pb-steps">
+
+          <div class="pb-step">
+            <div class="pb-when">Week 1</div>
+            <div class="pb-body">
+              <div class="pb-title">Scaffold &amp; golden dataset</div>
+              <p>Scaffold from the template (runnable day one), confirm UC access, start the golden dataset — the team writes examples of a good answer from day one, not after the agent exists.</p>
+              <div class="pb-meta">
+                <div><b>Team does</b>Scaffolds the project, confirms the data it needs is reachable, writes the first golden-dataset examples.</div>
+                <div><b>Platform does</b>Template, UC access pathway, eval harness already wired.</div>
+                <div><b>Done when</b>The scaffold runs end to end against a sample tool and the golden dataset has real examples in it.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pb-step">
+            <div class="pb-when">Week 2</div>
+            <div class="pb-body">
+              <div class="pb-title">Tools and prompt</div>
+              <p>Register tools through the governed pathway; build domain logic against the trace.</p>
+              <div class="pb-meta">
+                <div><b>Team does</b>Registers the tools the agent calls, writes the prompt, iterates against the trace.</div>
+                <div><b>Platform does</b>Governed registration pathway, tracing on by default.</div>
+                <div><b>Done when</b>The agent calls its real tools with access scoped to the caller.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pb-step">
+            <div class="pb-when">Week 3</div>
+            <div class="pb-body">
+              <div class="pb-title">Eval iterations</div>
+              <p>Run the golden dataset against the gate, fix what fails, tighten the rubric. This is where most of the quality work lands, and the schedule accounts for it.</p>
+              <div class="pb-meta">
+                <div><b>Team does</b>Runs evals, fixes failures, sharpens the rubric as they learn what good means.</div>
+                <div><b>Platform does</b>Eval machinery and the RAI floor (PII, safety, prompt-injection).</div>
+                <div><b>Done when</b>The golden dataset passes at the team's threshold.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pb-step">
+            <div class="pb-when">Week 4</div>
+            <div class="pb-body">
+              <div class="pb-title">Blueprint check &amp; deploy</div>
+              <p>Blueprint check, deploy, rollout behind human review. Security verifies a pattern instead of investigating a system; registration happens at deploy.</p>
+              <div class="pb-meta">
+                <div><b>Team does</b>Runs the blueprint check, deploys, turns the agent on behind human review.</div>
+                <div><b>Platform does</b>Pre-approved blueprint, one-command deploy, catalog registration.</div>
+                <div><b>Done when</b>Agent is live at Tier 1, registered in the catalog, with a named owner.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="footnote">A design target, not a schedule with a track record — the GTM build tests it, and its retro rewrites this table before the second team starts.</p>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+(function () {
+  var TABS = ['prompt', 'cover', 'measures', 'prd', 'playbooks'];
+  var tabButtons = document.querySelectorAll('button.tab');
+  var panels = {};
+  TABS.forEach(function (t) { panels[t] = document.getElementById('panel-' + t); });
+
+  function showTab(tab, sectionId) {
+    TABS.forEach(function (t) { panels[t].classList.toggle('active', t === tab); });
+    tabButtons.forEach(function (b) { b.classList.toggle('active', b.dataset.tab === tab); });
+    if (sectionId) {
+      var el = document.getElementById(sectionId);
+      if (el) el.scrollIntoView();
+    } else {
+      window.scrollTo(0, 0);
+    }
+    watchScrollspy(tab);
+  }
+
+  var activeTab = TABS[0];
+
+  // Hash syncing is best-effort: it works from file:// or http://, but some
+  // preview environments (data: URLs) block it — tabs must still work there.
+  function syncHash(tab, sectionId) {
+    try {
+      history.replaceState(null, '', '#' + tab + (sectionId ? '/' + sectionId : ''));
+    } catch (e) { /* blocked; ignore */ }
+  }
+
+  tabButtons.forEach(function (b) {
+    b.addEventListener('click', function () {
+      activeTab = b.dataset.tab;
+      syncHash(activeTab, null);
+      showTab(activeTab, null);
+    });
+  });
+
+  // Cross-tab links (#tab or #tab/sectionId) — handled directly so they work
+  // even where hash navigation is blocked
+  document.querySelectorAll('a.xlink').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      var parts = link.getAttribute('href').replace('#', '').split('/');
+      if (TABS.indexOf(parts[0]) === -1) return;
+      e.preventDefault();
+      activeTab = parts[0];
+      syncHash(activeTab, parts[1] || null);
+      showTab(activeTab, parts[1] || null);
+    });
+  });
+
+  // Left-pane tiles: scroll to section and record it in the hash (#tab/sectionId)
+  document.querySelectorAll('button.tile').forEach(function (tile) {
+    tile.addEventListener('click', function () {
+      syncHash(activeTab, tile.dataset.target);
+      // Highlight right away — the scrollspy can't reach sections near the
+      // bottom of a short page, so don't wait for it
+      tile.parentElement.querySelectorAll('button.tile').forEach(function (t) {
+        t.classList.toggle('active', t === tile);
+      });
+      var el = document.getElementById(tile.dataset.target);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // Scrollspy: highlight the tile whose section is nearest the top of the viewport
+  var spyObserver = null;
+  function watchScrollspy(tab) {
+    if (spyObserver) spyObserver.disconnect();
+    var panel = panels[tab];
+    var sections = panel.querySelectorAll('section.sub[id]');
+    var tiles = panel.querySelectorAll('button.tile');
+    if (!tiles.length) return;
+
+    function setActive(id) {
+      tiles.forEach(function (t) { t.classList.toggle('active', t.dataset.target === id); });
+    }
+
+    spyObserver = new IntersectionObserver(function (entries) {
+      var visible = [];
+      sections.forEach(function (s) {
+        var r = s.getBoundingClientRect();
+        if (r.top < window.innerHeight * 0.4 && r.bottom > 90) visible.push(s);
+      });
+      if (visible.length) setActive(visible[visible.length - 1].id);
+    }, { rootMargin: '-80px 0px -40% 0px', threshold: [0, 0.25, 0.5, 1] });
+
+    sections.forEach(function (s) { spyObserver.observe(s); });
+    // Initialize highlight immediately
+    setActive(sections.length ? sections[0].id : null);
+  }
+
+  function applyHash() {
+    var parts = (location.hash || '').replace('#', '').split('/');
+    activeTab = TABS.indexOf(parts[0]) !== -1 ? parts[0] : TABS[0];
+    showTab(activeTab, parts[1] || null);
+  }
+
+  window.addEventListener('hashchange', applyHash);
+  applyHash();
+})();
+</script>
+
+</body>
+</html>
