@@ -63,6 +63,16 @@
   button.tab:hover { color: var(--ink); }
   button.tab.active { color: var(--accent-deep); border-bottom-color: var(--accent); font-weight: 600; }
 
+  /* pushed to the right edge of the tab bar */
+  a.doclink {
+    margin-left: auto; white-space: nowrap;
+    font-size: 13px; font-weight: 600; text-decoration: none;
+    color: var(--accent-deep); background: var(--accent-soft);
+    border: 1px solid var(--accent); border-radius: 999px;
+    padding: 6px 14px; transition: background .15s;
+  }
+  a.doclink:hover { background: #dbe7ff; }
+
   /* ---------- tab panels ---------- */
   .panel { display: none; }
   .panel.active { display: block; }
@@ -110,6 +120,7 @@
   }
   h2 { font-size: 26px; line-height: 1.25; letter-spacing: -.01em; margin-bottom: 14px; }
   h3 { font-size: 18px; margin: 28px 0 10px; }
+  h4 { font-size: 15px; margin: 26px 0 8px; color: var(--ink); }
   p { color: var(--ink-2); margin-bottom: 14px; max-width: 76ch; }
   p strong, li strong { color: var(--ink); }
 
@@ -358,6 +369,7 @@
     <button class="tab" data-tab="measures">Success Measures &amp; Learning Plan</button>
     <button class="tab" data-tab="prd">PRD</button>
     <button class="tab" data-tab="playbooks">Runbook</button>
+    <a class="doclink" href="https://docs.google.com/document/d/10DRyPA6EFmlmfGmkNYnvJzJUGnJ0Hec-YpZc6J9erAI/edit?tab=t.4vpbbk2eedu4" target="_blank" rel="noopener noreferrer">PRD doc ↗</a>
   </div>
 </nav>
 
@@ -405,42 +417,49 @@
     <aside class="tiles">
       <div class="tiles-label">On this page</div>
       <button class="tile" data-target="cover-pr">PR</button>
-      <button class="tile" data-target="cover-faq">FAQ</button>
+      <button class="tile" data-target="cover-faq">Asked &amp; Answered</button>
     </aside>
     <main class="content">
 
       <section class="sub" id="cover-pr">
         <div class="kicker">Cover (PRFAQ)</div>
-        <h2>PRFAQ — Enterprise Agent Builder Platform</h2>
-        <p class="note">The end state, written first as the internal announcement we intend to send</p>
+        <h2>Cover</h2>
+        
 
-        <div class="headline">Any team can now ship a governed agent on shared rails, and GTM shipped the first one</div>
-        <div class="dateline">For the CIO and the GTM, Finance, HR, and Product teams</div>
+        <div class="headline">Enterprise Agent Builder platform Strategy</div>
 
-        <p>The Enterprise Agent Builder Platform is now live. Any domain team within Databricks can start from a golden-path template and have an agent deployed in production in as little as four weeks, with built-in data access and governance, evaluation rails, deployment, tracing, and cost tracking. Bricksters can now spend their time on the parts that are actually their own: the tools the agent calls, the prompt, and what a good answer looks like in their domain. The first agent built this way is a GTM account-research and call-prep assistant. It went from idea to production within four weeks on the shared rails.</p>
+        <p>The Enterprise Agent builder platform @ Databricks, built on top of the Agent Bricks platform, augments the core agent creation management capabilities with enterprise specific decisions and control pane ensuring the outcomes produced by the agents are inline with Databricks enterprise policies and approved workflows. As we manage a multitude of 3rd party systems such as Salesforce, Google and other ERP systems across domains — this layer will enable abstraction between core agentic workflows and 3rd party systems, ensuring seamless portability and plug-and-play model ensuring enterprise teams can stay agile with their product stack.</p>
 
-        <p>The platform is a thin, opinionated layer on top of Agent Bricks that standardizes how access is governed, how quality is gated, and how agents are cataloged. That gives teams a paved road to ship faster, and with confidence.</p>
+        <p>The platform will strive to enable domain teams within Databricks, start from a golden-path template and have an agentic application deployed in production in as little as four weeks, with built-in data access and governance, evaluation rails, deployment, tracing, and cost tracking. Bricksters can now spend their time on the parts that are actually their own: building MCPs for tools within their domains, prompt structuring, Eval definitions to validate agentic outcome.</p>
 
-        <div class="principle">
-          <p><strong>Core principle:</strong> teams own their domain and agentic outcomes; the platform owns the substrate underneath.</p>
+        <h3>In its ideal state, the platform will serve two different user personas</h3>
+        <div class="byo">
+          <div class="byo-card">
+            <div class="byo-name">Builders (v1)</div>
+            <p>Engineers on both the enterprise and partner teams will be able to build, share, re-use and deploy enterprise grade agentic experiences with built in security, financial and data controls.</p>
+          </div>
+          <div class="byo-card">
+            <div class="byo-name">Users on the Edge (v2+)</div>
+            <p>Non technical user personas across different teams will be able to create or modify existing deployments through a version controlled governance and approval lane, ensuring deployed experiences continue to deliver value.</p>
+          </div>
         </div>
       </section>
 
       <section class="sub" id="cover-faq">
-        <h2>FAQ</h2>
+        <h2>Asked &amp; Answered</h2>
 
         <div class="qa">
           <h3>Why build with GTM first?</h3>
           <div class="a">
             <p>GTM exercises the hard parts of the substrate: governed CRM access, retrieval over messy account history, and evaluation of open-ended output. Increasing the velocity of shipping agentic experiences in GTM will, in our assessment, have the most tangible impact on Databricks' revenue growth and the success of our customers.</p>
-            <p>We debated Finance and HR, and decided to sequence them as follow-up use cases. They carry a higher governance burden and a lower tolerance for a wrong answer, so they benefit most from onboarding after the governance and eval patterns are proven.</p>
+            <p>I debated Finance and HR, and decided to sequence them as follow-up use cases. They carry a higher governance burden and a lower tolerance for a wrong answer, so they benefit most from onboarding after the governance and eval patterns are proven.</p>
           </div>
         </div>
 
         <div class="qa">
           <h3>What does the platform give me that I don't get by building it myself?</h3>
           <div class="a">
-            <p>The split is: you bring the three things that are actually yours, and the platform owns everything underneath them.</p>
+            <p>Though domain builders and users on the edge can continue to bring their model, prompts and any tools — they will directly get one-click deploy for various harnesses ensuring the experiences they build and security compliance with the right controls where applicable.</p>
 
             <div class="byo">
               <div class="byo-card">
@@ -461,76 +480,42 @@
             <ul>
               <li><strong>The agent skeleton and graph topology.</strong> One standard shape (the <code>ResponsesAgent</code> contract) so every agent is traceable, testable, and deployable the same way.</li>
               <li><strong>Governed data and tool access</strong> through Unity Catalog, with per-tool auth and access enforced on behalf of the calling user.</li>
-              <li><strong>The eval pipeline</strong>, hooked up and waiting for the team's golden dataset and rubric.</li>
-              <li><strong>Draft, publish, invoke.</strong> Test against a draft and iterate without republishing; ship when it holds up.</li>
-              <li><strong>Version history with one-click rollback</strong>, so a bad prompt change can be reverted without a redeploy.</li>
-              <li><strong>Execution tracing</strong> — the full tool-call tree for a run, including inputs, outputs, and latency per step.</li>
-              <li><strong>Deploy, CI, and cost tracking</strong> on by default, scoped per team.</li>
+              <li><strong>The eval pipeline</strong>
+                <ul>
+                  <li>Consumption experience for the team's golden dataset and rubric.</li>
+                  <li>Execution tracing — the full tool-call tree for a run, including inputs, outputs, and latency per step.</li>
+                </ul>
+              </li>
+              <li><strong>Utilization telemetry</strong> to provide visibility into usage.</li>
+              <li><strong>Cost tracking</strong></li>
             </ul>
 
-            <p>Everything on this list is either a one-way door that is expensive to retrofit later, or something every agent needs. A team building bespoke builds all of it themselves, and then owns it.</p>
+            <p>Builders will also get direct access to a <strong>shared registry of all existing plugins, tools and skills</strong> built and published by others — reducing clone experiences and time to deploy.</p>
           </div>
         </div>
 
         <div class="qa">
           <h3>What did you deliberately not build?</h3>
           <div class="a">
-            <p>We deferred these to avoid building shared abstractions from a sample of one.</p>
-            <div class="table-scroll">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Cut</th>
-                    <th>Why it's out of V1</th>
-                    <th>Instead</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Custom model training / fine-tuning</td>
-                    <td>Foundation models are sufficient for starter use cases.</td>
-                    <td>Foundation Model APIs via model routing.</td>
-                  </tr>
-                  <tr>
-                    <td>Shared tool catalog</td>
-                    <td>A catalog at n=1 is a sub-optimal abstraction.</td>
-                    <td>Governed registration pathway; the catalog organically emerges from reuse.</td>
-                  </tr>
-                  <tr>
-                    <td>Bespoke frontend framework</td>
-                    <td>Commoditized; not our differentiation.</td>
-                    <td>Databricks Apps (Streamlit or React).</td>
-                  </tr>
-                  <tr>
-                    <td>Streaming-first / real-time</td>
-                    <td>Complexity the first use cases don't need.</td>
-                    <td>Request/response with human review.</td>
-                  </tr>
-                  <tr>
-                    <td>Visual / drag-and-drop agent builder</td>
-                    <td>Premature; our users are Python-fluent engineers. Config-driven registration covers them without a builder UI.</td>
-                    <td>Declarative config + docs.</td>
-                  </tr>
-                  <tr>
-                    <td>Multi-agent orchestration</td>
-                    <td>Reuse pattern unknown at one agent.</td>
-                    <td>Simple in-agent steps; platformize after the additional use cases.</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <p class="note">Disclaimer: These are not prioritized for the current phase but are included to ensure architectural decisions today do not preclude them.</p>
+            <ol>
+              <li><strong>Custom model training / fine-tuning</strong> — Lean on foundation models exposed through model router.</li>
+              <li><strong>Visual / drag-and-drop agent builder</strong> — Premature; initial users persona for v1 will be engineers and technical users. Config-driven registration covers them without a builder UI.</li>
+              <li><strong>Agents callable from Slack, Jira, or other non-Databricks surface</strong> to ensure unified invocation.</li>
+              <li><strong>Multi-agent orchestration</strong> — Start by supporting simple in-agent steps. Observe and learn from existing multi-agent orchestration use cases to understand and set guidelines on Agent composability.</li>
+            </ol>
           </div>
         </div>
 
         <div class="qa">
           <h3>How does the platform avoid becoming a bottleneck as more teams adopt it?</h3>
           <div class="a">
-            <p>Teams can build off the suggested path. We are targeting earned adoption, not mandated adoption. We enforce two binding constraints and nothing else:</p>
+            <p>Teams can build off the suggested path. We are targeting earned and not mandated adoption. We enforce two binding constraints, as a starting point.</p>
             <ul>
-              <li><strong>Adoption tiers</strong> — standardized checkpoints to graduate an agent across environments.</li>
+              <li><strong>Deployment tiers</strong> — standardized checkpoints to graduate an agent across environments.</li>
               <li><strong>The agent registry</strong> — every deployed agent is cataloged, on or off the path.</li>
             </ul>
-            <p>We will also monitor why teams go off-path. Understanding the rationale behind those decisions gives us a field signal on how to prioritize the platform backlog.</p>
+            <p>We will take a learning approach and closely monitor when and why teams go off-path. Understanding the rationale behind those decisions gives us a field signal on how to prioritize the platform backlog.</p>
           </div>
         </div>
 
@@ -542,7 +527,7 @@
                 <thead>
                   <tr>
                     <th>Tier</th>
-                    <th>What it is</th>
+                    <th>Definition</th>
                     <th>Checkpoint to advance</th>
                   </tr>
                 </thead>
@@ -554,7 +539,7 @@
                   </tr>
                   <tr>
                     <td>Tier 2 — Internal production</td>
-                    <td>Runs in a team's real workflow, still internal.</td>
+                    <td>Runs in a team's real workflow, but limited to unregulated environments (Ex: SOX independence).</td>
                     <td>
                       <ul>
                         <li>Named owner and on-call</li>
@@ -578,24 +563,66 @@
               </table>
             </div>
             <p>Registration is required at all three, and the automated Tier 1 checks apply on or off the golden path.</p>
+
+            <p>To maintain a standardized view into adoption of plugins and agents and to promote safe re-use, we will have tier agents across three axes.</p>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Axis</th>
+                    <th>Answers</th>
+                    <th>Values</th>
+                    <th>Who sets it</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Tier</td>
+                    <td>Severity of impact when the agent malfunctions</td>
+                    <td>Tier 1 sandbox · Tier 2 internal production · Tier 3 external / regulated</td>
+                    <td>Advancement gated by the checkpoints below.</td>
+                  </tr>
+                  <tr>
+                    <td>Maturity</td>
+                    <td>Lifecycle status</td>
+                    <td>Dev · Beta · GA · Deprecated</td>
+                    <td>The owning team, on its own timeline.</td>
+                  </tr>
+                  <tr>
+                    <td>Trust</td>
+                    <td>Readiness for broad re-use</td>
+                    <td>Community · Supported · Blocked</td>
+                    <td>Community by default; only a sponsor declares Supported; the platform sets Blocked.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p><strong>Tier</strong> is blast radius, and it is the only axis the platform gates. <strong>Maturity</strong> is the owning team's own signal about readiness — a Tier 2 agent can still be Beta. <strong>Trust</strong> is provenance: Community is the default for anything registered and passing its eval gate; Supported means a domain team has funded it for others to depend on, with a named owner, on-call, and a support channel; Blocked means withdrawn, with the reason and a successor recorded, and the invoke path refuses it rather than failing quietly.</p>
+
+            <p>Two rules keep the catalog honest. Sandbox agents expire — a Tier 1 agent with no usage that does not advance within 60 days is deregistered, with a warning first, so the catalog reflects what teams actually run. And automation gates before humans review: schema, eval, and access checks run first, and a person only looks at what passes.</p>
           </div>
         </div>
 
         <div class="qa">
           <h3>What would you report to the CIO next quarter?</h3>
           <div class="a">
-            <p><strong>Focus Areas:</strong></p>
-            <ul>
-              <li>Broad platform approach — what is governed vs. flexible</li>
-              <li>Success measures and learning plan</li>
-            </ul>
-            <p><strong>Two North Stars:</strong></p>
+            <p>The readout will focus on three areas and end with a live platform demo.</p>
+            <ol>
+              <li>Broad platform approach providing rationale on what we chose to govern versus leave flexible.</li>
+              <li>North Star metrics and why these determine platform success.</li>
+              <li>How we will learn from v1 — what are our leading indicators and success measures.</li>
+              <li>Live platform demo.</li>
+            </ol>
+
+            <p><strong>North Star metrics:</strong></p>
             <ul>
               <li>Time to production for a standard agent (target: under four weeks)</li>
               <li>Self-serve adoption: agents shipped without our help</li>
             </ul>
-            <p><strong>Leading and platform metrics:</strong> golden-path adoption, eval-gate coverage, and cost per agent. We do not report features shipped, lines of code, or tickets closed.</p>
-            <p>A 0→1 learning plan tests the assumptions the first two builds must prove. <a class="xlink" href="#measures">See Success Measures &amp; Learning Plan →</a></p>
+
+            <p><a class="xlink" href="#measures">Full list of Success Measures and Learning Plan →</a></p>
           </div>
         </div>
       </section>
@@ -616,7 +643,7 @@
 
       <section class="sub" id="measures-metrics">
         <div class="kicker">How we'll know it's working</div>
-        <h2>Success Metrics</h2>
+        <h2>Metrics (How will we measure adoption and success?)</h2>
         <div class="northstars">
           <div class="ns">
             <div class="ns-tag">North Star</div>
@@ -645,18 +672,18 @@
               <tr>
                 <th>Metric</th>
                 <th>Why it matters</th>
-                <th>Target next quarter</th>
+                <th>Target next quarter (illustrated)</th>
               </tr>
             </thead>
             <tbody>
               <tr class="group"><td colspan="3">Developer Experience <span class="group-note">leading indicators</span></td></tr>
               <tr>
-                <td>App code a team writes</td>
+                <td>App code a team writes per agent deployment</td>
                 <td>How much of the build the rails absorb. Less app code per agent means less for the team to maintain and review.</td>
                 <td>&gt; 50% reduction vs. a bespoke build of the same agent</td>
               </tr>
               <tr>
-                <td>App files a team owns</td>
+                <td>App files a team owns per agent deployment</td>
                 <td>Surface area handed to the domain team. Fewer files is less to understand before the first change.</td>
                 <td>&gt; 30% reduction vs. bespoke</td>
               </tr>
